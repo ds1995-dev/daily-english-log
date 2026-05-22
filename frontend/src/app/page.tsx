@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import WordForm from './components/WordForm';
+import WordCard from './components/WordCard';
 
 type Word = {
   id: number;
@@ -45,17 +46,9 @@ export default function Home() {
       <div className="flex justify-center mt-4">
       <WordForm onSubmit={handleAddWord} />
       </div>
-      <ul>
-        {words.map(word => (
-          <li key={word.id}>
-            <strong>{word.word}</strong>: {word.meaning}
-            {word.sentence && <p>Example: {word.sentence}</p>}
-            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" onClick={() => handleDeleteWord(word.id)}>
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
+      {words.map(word => (
+        <WordCard key={word.id} word={word} onDelete={handleDeleteWord} />
+      ))}
     </div>
   );
 }
