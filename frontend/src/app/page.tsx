@@ -31,6 +31,14 @@ export default function Home() {
       .then(newWord => setWords([...words, newWord]));
   };
 
+  const handleDeleteWord = async (id: number) => {
+    await fetch(`http://localhost/api/words/${id}`, {
+      method: 'DELETE',
+      headers: {'accept': 'application/json'},
+    });
+    setWords(words.filter(word => word.id !== id));
+  };
+
   return (
     <div>
       <h1 className="text-2xl font-bold flex justify-center">Vocabulary Flow</h1>
@@ -42,6 +50,9 @@ export default function Home() {
           <li key={word.id}>
             <strong>{word.word}</strong>: {word.meaning}
             {word.sentence && <p>Example: {word.sentence}</p>}
+            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" onClick={() => handleDeleteWord(word.id)}>
+              Delete
+            </button>
           </li>
         ))}
       </ul>
