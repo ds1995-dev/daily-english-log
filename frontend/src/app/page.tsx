@@ -12,43 +12,66 @@ type Word = {
 }
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [words, setWords] = useState<Word[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost/api/words')
-      .then(response => response.json())
-      .then(data => setWords(data));
+    try {
+      fetch('http://localhost/api/words')
+        .then(response => response.json())
+        .then(data => setWords(data))
+        .catch(err => setError(err.message))
+        .finally(() => setLoading(false));
+    } catch (err) {
+      setError((err as Error).message);
+    }
   }, []);
+  
 
   const handleAddWord = async (word: string, meaning: string, sentence?: string) => {
-    fetch('http://localhost/api/words', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ word, meaning, sentence })
-    })
-      .then(response => response.json())
-      .then(newWord => setWords([...words, newWord]));
+    try {
+      setLoading(true);
+      await fetch('http://localhost/api/words', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ word, meaning, sentence })
+      })
+        .then(response => response.json())
+        .then(newWord => setWords([...words, newWord]))
+    } catch (err) {
+      setError((err as Error).message);
+    }
   };
 
   const handleDeleteWord = async (id: number) => {
-    await fetch(`http://localhost/api/words/${id}`, {
-      method: 'DELETE',
-      headers: {'accept': 'application/json'},
-    });
-    setWords(words.filter(word => word.id !== id));
+    try {
+      setLoading(true);
+      await fetch(`http://localhost/api/words/${id}`, {
+        method: 'DELETE',
+        headers: { 'accept': 'application/json' },
+      });
+      setWords(words.filter(word => word.id !== id));
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div>
       <h1 className="text-2xl font-bold flex justify-center">Vocabulary Flow</h1>
       <div className="flex justify-center mt-4">
-      <WordForm onSubmit={handleAddWord} />
+        <WordForm onSubmit={handleAddWord} />
       </div>
       {words.map(word => (
         <WordCard key={word.id} word={word} onDelete={handleDeleteWord} />
       ))}
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">Error: {error}</p>}
     </div>
   );
 }
