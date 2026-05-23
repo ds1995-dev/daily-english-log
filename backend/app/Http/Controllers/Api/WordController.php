@@ -23,15 +23,13 @@ class WordController extends Controller
             'sentence' => 'nullable|string',
         ]);
 
-        Word::create([
+        $word = Word::create([
             'word' => $request->word,
             'meaning' => $request->meaning,
             'sentence' => $request->sentence,
         ]);
 
-        return response()->json([
-            'message' => 'Word created successfully',
-        ], 201);
+        return response()->json($word, 201);
     }
 
     public function update(Request $request, Word $word)
@@ -48,9 +46,7 @@ class WordController extends Controller
             'sentence' => $request->sentence,
         ]);
 
-        return response()->json([
-            'message' => 'Word updated successfully',
-        ]);
+        return response()->json($word);
     }
 
     public function destroy(Word $word)
@@ -60,5 +56,13 @@ class WordController extends Controller
         return response()->json([
             'message' => 'Word deleted successfully',
         ]);
+    }
+
+    public function toggleLearned(Word $word)
+    {
+        $word->is_learned = !$word->is_learned;
+        $word->save();
+
+        return response()->json($word);
     }
 }

@@ -9,6 +9,7 @@ type Word = {
   word: string;
   meaning: string;
   sentence: string | null;
+  is_learned: boolean;
 }
 
 export default function Home() {
@@ -70,6 +71,26 @@ export default function Home() {
     }
   };
 
+  const handleToggleLearned = async (id: number) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`http://localhost/api/words/${id}/toggle-learned`, {
+        method: 'PATCH',
+        headers: { 'accept': 'application/json' },
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to toggle learned status');
+      }
+      setWords((prevWords) => prevWords.map(word => word.id === id ? data : word));
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div>
       <h1 className="text-2xl font-bold flex justify-center">Vocabulary Flow</h1>
@@ -77,7 +98,7 @@ export default function Home() {
         <WordForm onSubmit={handleAddWord} />
       </div>
       {words.map(word => (
-        <WordCard key={word.id} word={word} onDelete={handleDeleteWord} />
+        <WordCard key={word.id} word={word} onDelete={handleDeleteWord} onToggleLearned={handleToggleLearned} />
       ))}
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">Error: {error}</p>}
