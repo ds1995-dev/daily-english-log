@@ -17,32 +17,41 @@ export default function Home() {
   const [words, setWords] = useState<Word[]>([]);
 
   useEffect(() => {
-    try {
-      fetch('http://localhost/api/words')
-        .then(response => response.json())
-        .then(data => setWords(data))
-        .catch(err => setError(err.message))
-        .finally(() => setLoading(false));
-    } catch (err) {
-      setError((err as Error).message);
+    const fetchWords = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost/api/words');
+        const data = await response.json();
+        setWords(data);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
+      }
     }
+    fetchWords();
   }, []);
-  
+
 
   const handleAddWord = async (word: string, meaning: string, sentence?: string) => {
     try {
       setLoading(true);
-      await fetch('http://localhost/api/words', {
+      const response = await fetch('http://localhost/api/words', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ word, meaning, sentence })
-      })
-        .then(response => response.json())
-        .then(newWord => setWords([...words, newWord]))
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to add word');
+      }
+      setWords((prevWords) => [...prevWords, data]);
     } catch (err) {
       setError((err as Error).message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,7 +62,7 @@ export default function Home() {
         method: 'DELETE',
         headers: { 'accept': 'application/json' },
       });
-      setWords(words.filter(word => word.id !== id));
+      setWords((prevWords) => prevWords.filter(word => word.id !== id));
     } catch (err) {
       setError((err as Error).message);
     } finally {
