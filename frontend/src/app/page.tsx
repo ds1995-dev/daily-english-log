@@ -1,21 +1,16 @@
 "use client";
 import { useState } from 'react';
 import { useEffect } from 'react';
-import WordForm from './components/WordForm';
-import WordCard from './components/WordCard';
-
-type Word = {
-  id: number;
-  word: string;
-  meaning: string;
-  sentence: string | null;
-  is_learned: boolean;
-}
+import { Word } from '../types/word';
+import WordForm from '../components/WordForm';
+import WordCard from '../components/WordCard';
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [words, setWords] = useState<Word[]>([]);
+  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState<'all' | 'learned' | 'unlearned'>('all');
 
   useEffect(() => {
     const fetchWords = async () => {
@@ -91,13 +86,24 @@ export default function Home() {
     }
   }
 
+  const filteredWords = words.filter(word => {
+    const matchesSearch = word.word.toLowerCase().includes(search.toLowerCase()) || word.meaning.toLowerCase().includes(search.toLowerCase());
+    const matchesFilter = filter === 'all' || (filter === 'learned' && word.is_learned) || (filter === 'unlearned' && !word.is_learned);
+    return matchesSearch && matchesFilter;
+  });
+
   return (
     <div>
       <h1 className="text-2xl font-bold flex justify-center">Vocabulary Flow</h1>
       <div className="flex justify-center mt-4">
         <WordForm onSubmit={handleAddWord} />
       </div>
-      {words.map(word => (
+      <div className="flex justify-center mt-4">
+        <button onClick={() => setFilter('all')} className={`px-4 py-2 ${filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>All</button>
+        <button onClick={() => setFilter('learned')} className={`px-4 py-2 ${filter === 'learned' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>Learned</button>
+        <button onClick={() => setFilter('unlearned')} className={`px-4 py-2 ${filter === 'unlearned' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>Unlearned</button>
+      </div>
+      {filteredWords.map(word => (
         <WordCard key={word.id} word={word} onDelete={handleDeleteWord} onToggleLearned={handleToggleLearned} />
       ))}
       {loading && <p>Loading...</p>}
