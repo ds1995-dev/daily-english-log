@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { Word } from '../types/word';
 import WordForm from '../components/WordForm';
 import WordCard from '../components/WordCard';
+import WordFilter from '../components/WordFilter';
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -99,10 +100,9 @@ export default function Home() {
         <WordForm onSubmit={handleAddWord} />
       </div>
       <div className="flex justify-center mt-4">
-        <button onClick={() => setFilter('all')} className={`px-4 py-2 ${filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>All</button>
-        <button onClick={() => setFilter('learned')} className={`px-4 py-2 ${filter === 'learned' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>Learned</button>
-        <button onClick={() => setFilter('unlearned')} className={`px-4 py-2 ${filter === 'unlearned' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>Unlearned</button>
+      <WordFilter search={search} setSearch={setSearch} filter={filter} onChange={setFilter} />
       </div>
+        
       {filteredWords.map(word => (
         <WordCard key={word.id} word={word} onDelete={handleDeleteWord} onToggleLearned={handleToggleLearned} />
       ))}
