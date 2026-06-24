@@ -100,12 +100,16 @@ export default function Home() {
         <WordForm onSubmit={handleAddWord} />
       </div>
       <div className="flex justify-center mt-4">
-      <WordFilter search={search} setSearch={setSearch} filter={filter} onChange={setFilter} />
+        <WordFilter search={search} setSearch={setSearch} filter={filter} onChange={setFilter} />
       </div>
-        
-      {filteredWords.map(word => (
-        <WordCard key={word.id} word={word} onDelete={handleDeleteWord} onToggleLearned={handleToggleLearned} />
-      ))}
+
+      {filteredWords.length === 0 ? (
+        <p className="text-2xl flex justify-center">No words found</p>
+      ) : (
+        filteredWords.map(word => (
+          <WordCard key={word.id} word={word} onDelete={handleDeleteWord} onToggleLearned={handleToggleLearned} />
+        ))
+      )}
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">Error: {error}</p>}
     </div>
