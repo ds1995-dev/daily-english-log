@@ -88,14 +88,14 @@ export default function Home() {
   }
 
   const filteredWords = words.filter(word => {
-    const matchesSearch = word.word.toLowerCase().includes(search.toLowerCase()) || word.meaning.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = word.word.toLowerCase().includes(search.toLowerCase()) || word.meaning.toLowerCase().includes(search.toLowerCase()) || word.sentence.toLowerCase().includes(search.toLowerCase());
     const matchesFilter = filter === 'all' || (filter === 'learned' && word.is_learned) || (filter === 'unlearned' && !word.is_learned);
     return matchesSearch && matchesFilter;
   });
 
   return (
     <div>
-      <h1 className="text-2xl font-bold flex justify-center">Vocabulary Flow</h1>
+      <h1 className="text-2xl font-bold flex justify-center">Daily English Log</h1>
       <div className="flex justify-center mt-4">
         <WordForm onSubmit={handleAddWord} />
       </div>
