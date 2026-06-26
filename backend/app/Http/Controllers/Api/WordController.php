@@ -17,34 +17,26 @@ class WordController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'word' => 'required|string|max:255',
             'meaning' => 'required|string',
             'sentence' => 'nullable|string',
         ]);
 
-        $word = Word::create([
-            'word' => $request->word,
-            'meaning' => $request->meaning,
-            'sentence' => $request->sentence,
-        ]);
+        $word = Word::create($validated);
 
         return response()->json($word, 201);
     }
 
     public function update(Request $request, Word $word)
     {
-        $request->validate([
+        $validated = $request->validate([
             'word' => 'required|string|max:255',
             'meaning' => 'required|string',
             'sentence' => 'nullable|string',
         ]);
 
-        $word->update([
-            'word' => $request->word,
-            'meaning' => $request->meaning,
-            'sentence' => $request->sentence,
-        ]);
+        $word->update($validated);
 
         return response()->json($word);
     }
