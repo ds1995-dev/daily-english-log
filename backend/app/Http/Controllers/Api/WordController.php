@@ -10,7 +10,8 @@ class WordController extends Controller
 {
     public function index()
     {
-        $words = Word::all();
+        $words = Word::with('category')
+            ->get();
 
         return response()->json($words);
     }
@@ -21,9 +22,12 @@ class WordController extends Controller
             'word' => 'required|string|max:255',
             'meaning' => 'required|string',
             'sentence' => 'nullable|string',
+            'category_id' => 'required|exists:categories,id',
         ]);
 
         $word = Word::create($validated);
+
+        $word->load('category');
 
         return response()->json($word, 201);
     }
@@ -34,6 +38,7 @@ class WordController extends Controller
             'word' => 'required|string|max:255',
             'meaning' => 'required|string',
             'sentence' => 'nullable|string',
+            'category_id' => 'required|exists:categories,id',
         ]);
 
         $word->update($validated);

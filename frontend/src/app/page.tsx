@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { Word } from '../types/word';
+import { Category } from '../types/category';
 import WordForm from '../components/WordForm';
 import WordCard from '../components/WordCard';
 import WordFilter from '../components/WordFilter';
@@ -10,6 +11,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [words, setWords] = useState<Word[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<'all' | 'learned' | 'unlearned'>('all');
 
@@ -18,8 +20,11 @@ export default function Home() {
       try {
         setLoading(true);
         const response = await fetch('http://localhost/api/words');
+        const categoriesResponse = await fetch('http://localhost/api/categories');
         const data = await response.json();
+        const categoriesData = await categoriesResponse.json();
         setWords(data);
+        setCategories(categoriesData);
       } catch (err) {
         setError((err as Error).message);
       } finally {
@@ -30,15 +35,16 @@ export default function Home() {
   }, []);
 
 
-  const handleAddWord = async (word: string, meaning: string, sentence?: string) => {
+  const handleAddWord = async (word: string, meaning: string, sentence: string, categoryId: number) => {
     try {
       setLoading(true);
+      setError(null);
       const response = await fetch('http://localhost/api/words', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ word, meaning, sentence })
+        body: JSON.stringify({ word, meaning, sentence, category_id: categoryId })
       });
       const data = await response.json();
       if (!response.ok) {
@@ -97,7 +103,7 @@ export default function Home() {
     <div>
       <h1 className="text-2xl font-bold flex justify-center">Daily English Log</h1>
       <div className="flex justify-center mt-4">
-        <WordForm onSubmit={handleAddWord} />
+        <WordForm onSubmit={handleAddWord} categories={categories} />
       </div>
       <div className="flex justify-center mt-4">
         <WordFilter search={search} setSearch={setSearch} filter={filter} onChange={setFilter} />
@@ -107,7 +113,7 @@ export default function Home() {
         <p className="text-2xl flex justify-center">No words found</p>
       ) : (
         filteredWords.map(word => (
-          <WordCard key={word.id} word={word} onDelete={handleDeleteWord} onToggleLearned={handleToggleLearned} />
+          <WordCard key={word.id} word={word} category={categories} onDelete={handleDeleteWord} onToggleLearned={handleToggleLearned} />
         ))
       )}
       {loading && <p>Loading...</p>}
