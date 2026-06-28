@@ -58,6 +58,7 @@ class WordController extends Controller
     public function toggleLearned(Word $word)
     {
         $word->is_learned = !$word->is_learned;
+        $word->load('category');
         $word->save();
 
         return response()->json($word);

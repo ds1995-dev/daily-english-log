@@ -58,6 +58,27 @@ export default function Home() {
     }
   };
 
+  const handleAddCategory = async (name: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch('http://localhost/api/categories', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name})
+      });
+      const data = await response.json();
+      setCategories((prevCategories) => [...prevCategories, data]);
+      return data;
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const handleDeleteWord = async (id: number) => {
     try {
       setLoading(true);
@@ -103,7 +124,7 @@ export default function Home() {
     <div>
       <h1 className="text-2xl font-bold flex justify-center">Daily English Log</h1>
       <div className="flex justify-center mt-4">
-        <WordForm onSubmit={handleAddWord} categories={categories} />
+        <WordForm onSubmit={handleAddWord} categories={categories} onCreateCategory={handleAddCategory} />
       </div>
       <div className="flex justify-center mt-4">
         <WordFilter search={search} setSearch={setSearch} filter={filter} onChange={setFilter} />
