@@ -4,7 +4,7 @@ import { Category} from '../types/category';
 
 type WordCardProps = {
     word: Word;
-    category: Category;
+    category: Category[];
     onDelete: (id: number) => void;
     onToggleLearned: (id: number) => void;
 }
