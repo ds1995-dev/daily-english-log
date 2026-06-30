@@ -13,6 +13,7 @@ export default function Home() {
   const [words, setWords] = useState<Word[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [search, setSearch] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState<number | 'all'>('all')
   const [filter, setFilter] = useState<'all' | 'learned' | 'unlearned'>('all');
 
   useEffect(() => {
@@ -117,7 +118,8 @@ export default function Home() {
   const filteredWords = words.filter(word => {
     const matchesSearch = word.word.toLowerCase().includes(search.toLowerCase()) || word.meaning.toLowerCase().includes(search.toLowerCase()) || word.sentence.toLowerCase().includes(search.toLowerCase());
     const matchesFilter = filter === 'all' || (filter === 'learned' && word.is_learned) || (filter === 'unlearned' && !word.is_learned);
-    return matchesSearch && matchesFilter;
+    const matchesCategory = categoryFilter === 'all' || word.category_id === categoryFilter;
+    return matchesSearch && matchesFilter && matchesCategory;
   });
 
   return (
@@ -127,7 +129,15 @@ export default function Home() {
         <WordForm onSubmit={handleAddWord} categories={categories} onCreateCategory={handleAddCategory} />
       </div>
       <div className="flex justify-center mt-4">
-        <WordFilter search={search} setSearch={setSearch} filter={filter} onChange={setFilter} />
+        <WordFilter
+        search={search}
+        setSearch={setSearch}
+        filter={filter}
+        onChange={setFilter}
+        categories={categories}
+        categoryFilter={categoryFilter}
+        onCategoryChange={setCategoryFilter}
+        />
       </div>
 
       {filteredWords.length === 0 ? (
