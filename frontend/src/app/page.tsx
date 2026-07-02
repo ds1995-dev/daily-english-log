@@ -137,8 +137,10 @@ export default function Home() {
         </nav>
       </aside>
       <main>
-        <div>
-          <h1 className="text-2xl font-bold flex justify-center">Daily English Log</h1>
+        <header>
+          <h1 className="text-2xl font-bold text-center mt-4">Hello Daichi👋</h1>
+          <p className="text-center text-gray-600">Let's learn English today!!</p>
+        </header>
           <div className="flex justify-center mt-4">
             <WordForm onSubmit={handleAddWord} categories={categories} onCreateCategory={handleAddCategory} />
           </div>
@@ -163,7 +165,6 @@ export default function Home() {
           )}
           {loading && <p>Loading...</p>}
           {error && <p className="text-red-500">Error: {error}</p>}
-        </div>
       </main>
     </div>
   );
