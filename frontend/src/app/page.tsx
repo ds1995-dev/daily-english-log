@@ -68,7 +68,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name})
+        body: JSON.stringify({ name })
       });
       const data = await response.json();
       setCategories((prevCategories) => [...prevCategories, data]);
@@ -123,32 +123,48 @@ export default function Home() {
   });
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold flex justify-center">Daily English Log</h1>
-      <div className="flex justify-center mt-4">
-        <WordForm onSubmit={handleAddWord} categories={categories} onCreateCategory={handleAddCategory} />
-      </div>
-      <div className="flex justify-center mt-4">
-        <WordFilter
-        search={search}
-        setSearch={setSearch}
-        filter={filter}
-        onChange={setFilter}
-        categories={categories}
-        categoryFilter={categoryFilter}
-        onCategoryChange={setCategoryFilter}
-        />
-      </div>
+    <div className="min-h-screen flex bg-gray-50">
+      <aside className="w-64 bg-white border-r border-gray-200 p-6">
+        <h1 className="text-xl font-bold text-blue-600">
+          Daily English Log
+        </h1>
+        <nav className="mt-8 space-y-4">
+          <p className="font-medium text-blue-600">Dashboard</p>
+          <p className="text-gray-600">All Words</p>
+          <p className="text-gray-600">Learned</p>
+          <p className="text-gray-600">Unlearned</p>
+          <p className="text-gray-600">Categories</p>
+        </nav>
+      </aside>
+      <main>
+        <div>
+          <h1 className="text-2xl font-bold flex justify-center">Daily English Log</h1>
+          <div className="flex justify-center mt-4">
+            <WordForm onSubmit={handleAddWord} categories={categories} onCreateCategory={handleAddCategory} />
+          </div>
+          <div className="flex justify-center mt-4">
+            <WordFilter
+              search={search}
+              setSearch={setSearch}
+              filter={filter}
+              onChange={setFilter}
+              categories={categories}
+              categoryFilter={categoryFilter}
+              onCategoryChange={setCategoryFilter}
+            />
+          </div>
 
-      {filteredWords.length === 0 ? (
-        <p className="text-2xl flex justify-center">No words found</p>
-      ) : (
-        filteredWords.map(word => (
-          <WordCard key={word.id} word={word} category={categories} onDelete={handleDeleteWord} onToggleLearned={handleToggleLearned} />
-        ))
-      )}
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">Error: {error}</p>}
+          {filteredWords.length === 0 ? (
+            <p className="text-2xl flex justify-center">No words found</p>
+          ) : (
+            filteredWords.map(word => (
+              <WordCard key={word.id} word={word} category={categories} onDelete={handleDeleteWord} onToggleLearned={handleToggleLearned} />
+            ))
+          )}
+          {loading && <p>Loading...</p>}
+          {error && <p className="text-red-500">Error: {error}</p>}
+        </div>
+      </main>
     </div>
   );
 }
