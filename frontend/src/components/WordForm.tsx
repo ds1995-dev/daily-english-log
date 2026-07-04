@@ -49,22 +49,21 @@ export default function WordForm({ categories, onSubmit, onCreateCategory }: Wor
         }
     }
     return (
-        <form className="border border-gray-300 p-4 space-y-4" onSubmit={handleSubmit}>
+        <form className="bg-white rounded shadow-md border-gray-300 p-4 space-y-4" onSubmit={handleSubmit}>
+            <h2 className="text-lg font-bold">Add a new Word</h2>
+            <div className="flex justify-content gap-4">
             <div>
-                <label>Word:</label>
-                <input className="border border-gray-300 p-2" type="text" value={word} onChange={(e) => setWord(e.target.value)} required />
+                <input className="border rounded border-gray-300 p-2" type="text" value={word} onChange={(e) => setWord(e.target.value)} placeholder="Word" required />
             </div>
             <div>
-                <label>Meaning:</label>
-                <input className="border border-gray-300 p-2" type="text" value={meaning} onChange={(e) => setMeaning(e.target.value)} required />
+                <input className="border rounded border-gray-300 p-2" type="text" value={meaning} onChange={(e) => setMeaning(e.target.value)} placeholder="Meaning" required />
             </div>
             <div>
-                <label>Example Sentence (optional):</label>
-                <input className="border border-gray-300 p-2" type="text" value={sentence} onChange={(e) => setSentence(e.target.value)} />
+                <input className="border rounded border-gray-300 p-2" type="text" value={sentence} onChange={(e) => setSentence(e.target.value)} placeholder="Example Sentence" />
             </div>
             <div>
-                <label>Category:</label>
                 <select
+                    className="border rounded border-gray-300 p-2"
                     value={selectedCategoryId}
                     onChange={(e) => setSelectedCategoryId(Number(e.target.value))}
                     required
@@ -77,9 +76,8 @@ export default function WordForm({ categories, onSubmit, onCreateCategory }: Wor
                     ))}
                 </select>
                 <div>
-                    <label>New category</label>
-                    <input className="border border-gray-300 p-2" type="text" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} />
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded" type="button" onClick={handleSubmitCategory}>Add Category</button>
+                    <input className="border rounded border-gray-300 p-2" type="text" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} placeholder="New category" />
+                    <button className="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded" type="button" onClick={handleSubmitCategory}>Add Category</button>
                     {categoryMessage && (
                         <p className="text-green-600">{categoryMessage}</p>
                     )}
@@ -87,6 +85,7 @@ export default function WordForm({ categories, onSubmit, onCreateCategory }: Wor
                         <p className="text-red-600">{categoryError}</p>
                     )}
                 </div>
+            </div>
             </div>
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Add Word</button>
         </form>

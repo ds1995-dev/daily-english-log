@@ -17,20 +17,21 @@ type WordFilterProps = {
 export default function WordFilter({
     search, setSearch, filter, onChange, categories, categoryFilter, onCategoryChange }: WordFilterProps) {
     return (
-        <div className="m-4 flex justify-center mt-4">
+        <div className="bg-white rounded shadow-md border-gray-300 w-full p-4 mt-4">
+            <h2 className="text-lg font-bold mr-4">Search & Filter</h2>
             <input
-                className="border border-gray-300 p-2 w-1/3"
+                className="border rounded border-gray-300 p-2 w-1/3"
                 type="text"
                 placeholder="Search..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
             />
-
-            <button onClick={() => onChange('all')} className={`px-4 py-2 ${filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>All</button>
-            <button onClick={() => onChange('learned')} className={`px-4 py-2 ${filter === 'learned' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>Learned</button>
-            <button onClick={() => onChange('unlearned')} className={`px-4 py-2 ${filter === 'unlearned' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>Unlearned</button>
+            <div className="flex gap-4 mt-2">
+            <button onClick={() => onChange('all')} className={`border rounded border-gray-300 p-2 ${filter === 'all' ? 'bg-blue-500 text-white' : 'bg-white'}`}>All</button>
+            <button onClick={() => onChange('learned')} className={`border rounded border-gray-300 p-2 ${filter === 'learned' ? 'bg-blue-500 text-white' : 'bg-white'}`}>Learned</button>
+            <button onClick={() => onChange('unlearned')} className={`border rounded border-gray-300 p-2 ${filter === 'unlearned' ? 'bg-blue-500 text-white' : 'bg-white'}`}>Unlearned</button>
             <select
-                className={`px-4 py-2 ${filter === 'unlearned' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                className="border rounded border-gray-300 p-2"
                 value={categoryFilter}
                 onChange={(e) => {
                     const value = e.target.value;
@@ -42,7 +43,7 @@ export default function WordFilter({
                     );
                 }}
             >
-            <option value='all'>All</option>
+            <option value='all'>All Categories</option>
             {categories.map(category => (
                 <option
                     key={category.id}
@@ -52,6 +53,7 @@ export default function WordFilter({
                 </option>
             ))}
         </select>
+        </div>
         </div >
     )
 }
