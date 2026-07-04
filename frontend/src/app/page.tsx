@@ -5,6 +5,7 @@ import { Word } from '../types/word';
 import { Category } from '../types/category';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
+import { MobileHeader } from '../components/MobileHeader';
 import { StatCard } from '../components/StatCard';
 import WordForm from '../components/WordForm';
 import WordCard from '../components/WordCard';
@@ -132,19 +133,20 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="md:min-h-screen md:flex bg-gray-50">
       <Sidebar />
-      <main>
+      <MobileHeader />
+      <main className="flex-1 min-w-0">
         <Header />
-        <div className="flex justify-center mt-4">
-        {stats.map((stat) => (
-          <StatCard title={stat.title} value={stat.value} subtext={stat.subtext} key={stat.title} />
-        ))}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mt-4">
+          {stats.map((stat) => (
+            <StatCard title={stat.title} value={stat.value} subtext={stat.subtext} key={stat.title} />
+          ))}
         </div>
-        <div className="flex justify-center mt-4">
+        <div className="flex-1 min-w-0 justify-center mt-4">
           <WordForm onSubmit={handleAddWord} categories={categories} onCreateCategory={handleAddCategory} />
         </div>
-        <div className="flex justify-center mt-4">
+        <div className="flex-1 min-w-0 justify-center p-4">
           <WordFilter
             search={search}
             setSearch={setSearch}
