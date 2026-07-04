@@ -6,9 +6,9 @@ type StatCardProps = {
 
 export function StatCard({ title, value, subtext }: StatCardProps) {
     return (
-            <div className="bg-white p-4 rounded shadow-md w-1/4 mr-4">
-                <h2 className="text-lg font-bold mb-2">{title}</h2>
-                <p className="text-2xl font-bold">{value}</p>
+            <div className="bg-white md:p-4 lg:p-6 rounded shadow-md w-full mr-4">
+                <h2 className="md:text-lg font-bold mb-2">{title}</h2>
+                <p className="md:text-2xl font-bold">{value}</p>
                 <p className="text-gray-600">{subtext}</p>
             </div>
     )
