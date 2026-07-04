@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { Word } from '../types/word';
 import { Category } from '../types/category';
+import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
+import { StatCard } from '../components/StatCard';
 import WordForm from '../components/WordForm';
 import WordCard from '../components/WordCard';
 import WordFilter from '../components/WordFilter';
@@ -15,6 +18,12 @@ export default function Home() {
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<number | 'all'>('all')
   const [filter, setFilter] = useState<'all' | 'learned' | 'unlearned'>('all');
+  const stats = [
+    { title: 'Total Words', value: words.length, subtext: 'Total words' },
+    { title: 'Learned', value: words.filter(w => w.is_learned).length, subtext: 'Words' },
+    { title: 'Categories', value: categories.length, subtext: 'categories' },
+    { title: 'Streak', value: words.length, subtext: 'days' }
+  ];
 
   useEffect(() => {
     const fetchWords = async () => {
@@ -124,47 +133,38 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex bg-gray-50">
-      <aside className="w-64 bg-white border-r border-gray-200 p-6">
-        <h1 className="text-xl font-bold text-blue-600">
-          Daily English Log
-        </h1>
-        <nav className="mt-8 space-y-4">
-          <p className="font-medium text-blue-600">Dashboard</p>
-          <p className="text-gray-600">All Words</p>
-          <p className="text-gray-600">Learned</p>
-          <p className="text-gray-600">Unlearned</p>
-          <p className="text-gray-600">Categories</p>
-        </nav>
-      </aside>
+      <Sidebar />
       <main>
-        <header>
-          <h1 className="text-2xl font-bold text-center mt-4">Hello Daichi👋</h1>
-          <p className="text-center text-gray-600">Let's learn English today!!</p>
-        </header>
-          <div className="flex justify-center mt-4">
-            <WordForm onSubmit={handleAddWord} categories={categories} onCreateCategory={handleAddCategory} />
-          </div>
-          <div className="flex justify-center mt-4">
-            <WordFilter
-              search={search}
-              setSearch={setSearch}
-              filter={filter}
-              onChange={setFilter}
-              categories={categories}
-              categoryFilter={categoryFilter}
-              onCategoryChange={setCategoryFilter}
-            />
-          </div>
+        <Header />
+        <div className="flex justify-center mt-4">
+        {stats.map((stat) => (
+          <StatCard title={stat.title} value={stat.value} subtext={stat.subtext} key={stat.title} />
+        ))}
+        </div>
+        <div className="flex justify-center mt-4">
+          <WordForm onSubmit={handleAddWord} categories={categories} onCreateCategory={handleAddCategory} />
+        </div>
+        <div className="flex justify-center mt-4">
+          <WordFilter
+            search={search}
+            setSearch={setSearch}
+            filter={filter}
+            onChange={setFilter}
+            categories={categories}
+            categoryFilter={categoryFilter}
+            onCategoryChange={setCategoryFilter}
+          />
+        </div>
 
-          {filteredWords.length === 0 ? (
-            <p className="text-2xl flex justify-center">No words found</p>
-          ) : (
-            filteredWords.map(word => (
-              <WordCard key={word.id} word={word} category={categories} onDelete={handleDeleteWord} onToggleLearned={handleToggleLearned} />
-            ))
-          )}
-          {loading && <p>Loading...</p>}
-          {error && <p className="text-red-500">Error: {error}</p>}
+        {filteredWords.length === 0 ? (
+          <p className="text-2xl flex justify-center">No words found</p>
+        ) : (
+          filteredWords.map(word => (
+            <WordCard key={word.id} word={word} category={categories} onDelete={handleDeleteWord} onToggleLearned={handleToggleLearned} />
+          ))
+        )}
+        {loading && <p>Loading...</p>}
+        {error && <p className="text-red-500">Error: {error}</p>}
       </main>
     </div>
   );
