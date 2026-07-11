@@ -1,15 +1,12 @@
 "use client";
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Word } from '../types/word';
 import { Category } from '../types/category';
-import Header from '../components/Header';
-import Sidebar from '../components/Sidebar';
-import { MobileHeader } from '../components/MobileHeader';
-import { StatCard } from '../components/StatCard';
-import WordForm from '../components/WordForm';
-import WordCard from '../components/WordCard';
-import WordFilter from '../components/WordFilter';
+import { Header } from '../components/dashboard/Header';
+import { StatCard } from '../components/dashboard/StatCard';
+import { WordForm } from '../components/dashboard/WordForm';
+import { WordCard } from '../components/dashboard/WordCard';
+import { WordFilter } from '../components/dashboard/WordFilter';
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -133,10 +130,7 @@ export default function Home() {
   });
 
   return (
-    <div className="md:min-h-screen md:flex bg-gray-50">
-      <Sidebar />
-      <MobileHeader />
-      <main className="flex-1 min-w-0">
+      <main className="flex-1 min-w-0 p-4">
         <Header />
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mt-4">
           {stats.map((stat) => (
@@ -168,6 +162,5 @@ export default function Home() {
         {loading && <p>Loading...</p>}
         {error && <p className="text-red-500">Error: {error}</p>}
       </main>
-    </div>
   );
 }

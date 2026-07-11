@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import { Category } from '../types/category';
+import { Category } from '../../types/category';
 
 type WordFormProps = {
     categories: Category[];
@@ -8,7 +8,7 @@ type WordFormProps = {
     onCreateCategory: (name: string) => Promise<Category>;
 };
 
-export default function WordForm({ categories, onSubmit, onCreateCategory }: WordFormProps) {
+export function WordForm({ categories, onSubmit, onCreateCategory }: WordFormProps) {
     const [word, setWord] = useState('');
     const [meaning, setMeaning] = useState('');
     const [sentence, setSentence] = useState('');
@@ -51,24 +51,24 @@ export default function WordForm({ categories, onSubmit, onCreateCategory }: Wor
     return (
         <form className="bg-white rounded shadow-md border-gray-300 p-1 space-y-4" onSubmit={handleSubmit}>
             <h2 className="md:text-lg font-bold">Add a new Word</h2>
-            <div className="md:flex w-full min-w-0 justify-content gap-4">
+            <div className="md:flex flex-wrap w-full min-w-0 justify-content gap-4">
                 <input className="block border rounded border-gray-300 md:p-2" type="text" value={word} onChange={(e) => setWord(e.target.value)} placeholder="Word" required />
                 <input className="block border rounded border-gray-300 md:p-2" type="text" value={meaning} onChange={(e) => setMeaning(e.target.value)} placeholder="Meaning" required />
                 <input className="block border rounded border-gray-300 md:p-2" type="text" value={sentence} onChange={(e) => setSentence(e.target.value)} placeholder="Example Sentence" />
                 <div>
-                <select
-                    className="block border rounded border-gray-300 md:p-2"
-                    value={selectedCategoryId}
-                    onChange={(e) => setSelectedCategoryId(Number(e.target.value))}
-                    required
-                >
-                    <option value="">Select category</option>
-                    {categories.map((category) => (
-                        <option key={category.id} value={category.id}>
-                            {category.name}
-                        </option>
-                    ))}
-                </select>
+                    <select
+                        className="block border rounded border-gray-300 md:p-2"
+                        value={selectedCategoryId}
+                        onChange={(e) => setSelectedCategoryId(Number(e.target.value))}
+                        required
+                    >
+                        <option value="">Select category</option>
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <input className="block border rounded border-gray-300 md:p-2" type="text" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} placeholder="New category" />
                 <button className="block bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold p-1 md:py-2 rounded" type="button" onClick={handleSubmitCategory}>Add Category</button>
