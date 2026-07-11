@@ -1,4 +1,4 @@
-export default function Header() {
+export function Header() {
     return (
         <header>
             <h1 className="text-2xl font-bold text-center mt-4">Hello Daichi👋</h1>

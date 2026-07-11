@@ -1,5 +1,5 @@
 import { on } from 'events';
-import { Category } from '../types/category'
+import { Category } from '../../types/category'
     ;
 type Filter = 'all' | 'learned' | 'unlearned';
 
@@ -14,7 +14,7 @@ type WordFilterProps = {
 
 }
 
-export default function WordFilter({
+export function WordFilter({
     search, setSearch, filter, onChange, categories, categoryFilter, onCategoryChange }: WordFilterProps) {
     return (
         <div className="bg-white rounded shadow-md border-gray-300 w-auto p-4">

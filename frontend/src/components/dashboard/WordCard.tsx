@@ -1,6 +1,6 @@
 import React from 'react';
-import { Word } from '../types/word';
-import { Category } from '../types/category';
+import { Word } from '../../types/word';
+import { Category } from '../../types/category';
 import { Trash2 } from 'lucide-react';
 import { Circle } from 'lucide-react';
 import { CircleCheck } from 'lucide-react';
@@ -12,7 +12,7 @@ type WordCardProps = {
     onToggleLearned: (id: number) => void;
 }
 
-export default function WordCard({ word, onDelete, onToggleLearned }: WordCardProps) {
+export function WordCard({ word, onDelete, onToggleLearned }: WordCardProps) {
     return (
         <div className="flex w-full w-min-0 justify-between border rounded border-gray-300 bg-white p-4">
             <div className="mr-10">
