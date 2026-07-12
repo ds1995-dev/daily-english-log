@@ -5,6 +5,7 @@ import { CategoriesStatCard } from '../../components/categories/CategoriesStatCa
 import { CategoryForm } from '../../components/categories/CategoryForm';
 import { Word } from '../../types/word';
 import { Category } from '../../types/category';
+import { CategoryList } from '../../components/categories/CategoryList';
 
 export default function CategoriesPage() {
     const [loading, setLoading] = useState(true);
@@ -63,15 +64,36 @@ export default function CategoriesPage() {
             setLoading(false);
         }
     }
-return (
-    <main className="flex-1 min-w-0 p-4">
-        <CategoriesHeader />
-        <div className="flex justify-content gap-4 mt-4">
-            {categoriesStats.map((stat) => (
-                <CategoriesStatCard key={stat.title} title={stat.title} value={stat.value} />
-            ))}
-        </div>
-        <CategoryForm onSubmit={handleAddCategory} />
-    </main>
-);
+    const handleDeleteCategory = async (id: number) => {
+        try {
+            setLoading(true);
+            await fetch(`http://localhost/api/categories/${id}`, {
+                method: 'DELETE',
+                headers: { 'accept': 'application/json' },
+            });
+            setCategories(prev => prev.filter(category => category.id !== id));
+        } catch (err) {
+            setError((err as Error).message);
+        } finally {
+            setLoading(false);
+        }
+    };
+    return (
+        <main className="flex-1 min-w-0 p-4">
+            <CategoriesHeader />
+            <div className="flex justify-content gap-4 mt-4">
+                {categoriesStats.map((stat) => (
+                    <CategoriesStatCard key={stat.title} title={stat.title} value={stat.value} />
+                ))}
+            </div>
+            <CategoryForm onSubmit={handleAddCategory} />
+            <CategoryList
+                categories={categories}
+                words={words}
+                onDelete={handleDeleteCategory}
+            />
+            {loading && <p>Loading...</p>}
+            {error && <p className="text-red-500">Error: {error}</p>}
+        </main>
+    );
 }
