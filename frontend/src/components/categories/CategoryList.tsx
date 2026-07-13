@@ -6,9 +6,10 @@ type CategoryListProps = {
     categories: Category[];
     words: Word[];
     onDelete: (id: number) => void;
+    onUpdate: (id: number, newName: string) => Promise<void>;
 };
 
-export function CategoryList({ categories, words, onDelete }: CategoryListProps) {
+export function CategoryList({ categories, words, onDelete, onUpdate }: CategoryListProps) {
     return (
         <div className="bg-white rounded shadow p-4 mt-4">
             <h2 className="text-lg font-bold mb-4">Category List</h2>
@@ -36,6 +37,7 @@ export function CategoryList({ categories, words, onDelete }: CategoryListProps)
                                     category={category}
                                     wordCount={wordCount}
                                     onDelete={onDelete}
+                                    onUpdate={onUpdate}
                                 />
                             );
                         })}
