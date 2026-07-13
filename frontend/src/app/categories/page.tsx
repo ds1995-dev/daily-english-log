@@ -64,6 +64,32 @@ export default function CategoriesPage() {
             setLoading(false);
         }
     }
+    const handleUpdateCategory = async (id: number, newName: string) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response = await fetch(`http://localhost/api/categories/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({name: newName})
+            });
+
+            if (!response.ok) throw new Error('Failed to update');
+
+            const updatedCategory = await response.json();
+
+            setCategories(prev =>
+                prev.map(cat => cat.id === id ? updatedCategory : cat)
+            );
+        } catch (err) {
+            setError((err as Error).message);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    }
     const handleDeleteCategory = async (id: number) => {
         try {
             setLoading(true);
@@ -91,6 +117,7 @@ export default function CategoriesPage() {
                 categories={categories}
                 words={words}
                 onDelete={handleDeleteCategory}
+                onUpdate={handleUpdateCategory}
             />
             {loading && <p>Loading...</p>}
             {error && <p className="text-red-500">Error: {error}</p>}
