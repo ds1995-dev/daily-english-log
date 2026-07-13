@@ -31,10 +31,10 @@ export function CategoryForm({ onSubmit }: CategoryFormProps) {
 
     return (
         <form className="bg-white rounded shadow-md border-gray-300 p-4 space-y-4 mt-4" onSubmit={handleSubmit}>
-            <h2 className="md:text-lg font-bold">Add a new Category</h2>
-            <div className="md:flex w-full min-w-0 justify-content gap-4">
-                <input className="block border rounded border-gray-300 md:p-2" type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Category Name" required />
-                <button className="bg-blue-500 text-white rounded p-2 md:p-2" type="submit">Add Category</button>
+            <h2 className="text-md md:text-lg font-bold">Add a new Category</h2>
+            <div className="md:flex w-full min-w-0">
+                <input className="border rounded border-gray-300 md:p-2" type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Category Name" required />
+                <button className="bg-blue-500 text-white text-sm md:text-lg rounded p-1 md:p-2" type="submit">Add Category</button>
                 {categoryMessage && <p className="text-green-500">{categoryMessage}</p>}
                 {categoryError && <p className="text-red-500">{categoryError}</p>}
             </div>
