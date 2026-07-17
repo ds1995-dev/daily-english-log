@@ -18,7 +18,7 @@ class RegisterController extends Controller
         User::create($validated);
 
         return response()->json([
-            'messege' => 'User created successfully'
+            'message' => 'User created successfully'
         ], 201);
     }
 }
