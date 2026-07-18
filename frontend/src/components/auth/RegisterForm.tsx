@@ -3,16 +3,23 @@ import { useState } from 'react';
 import { User } from '../../types/user';
 
 type RegisterFormProps = {
-    onSubmit: (user: User) => Promise<void>;
+    onSubmit: (user: User) => Promise<boolean>;
     loading: boolean;
-    error: string | null;
+    fieldErrors: Record<string, string[]>;
+    generalError: string | null;
 }
 
-export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
+export function RegisterForm({ onSubmit, loading, fieldErrors, generalError }: RegisterFormProps) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
+
+    // フィールド別のバリデーションエラーを表示する
+    const renderFieldError = (field: string) =>
+        fieldErrors[field]?.map((message) => (
+            <p key={message} className="text-red-500 text-sm">{message}</p>
+        ));
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -23,12 +30,14 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
             password,
             password_confirmation: passwordConfirmation
         }
-        await onSubmit(user);
-        setName('');
-        setEmail('');
-        setPassword('');
-        setPasswordConfirmation('');
-
+        const ok = await onSubmit(user);
+        // 成功時のみ入力をクリアする（バリデーション失敗時は入力を残す）
+        if (ok) {
+            setName('');
+            setEmail('');
+            setPassword('');
+            setPasswordConfirmation('');
+        }
     };
 
     return (
@@ -45,6 +54,7 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                 />
+                {renderFieldError('name')}
             </div>
             <div>
                 <label htmlFor="email">
@@ -57,6 +67,7 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
+                {renderFieldError('email')}
             </div>
             <div>
                 <label htmlFor="password">
@@ -69,6 +80,7 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
+                {renderFieldError('password')}
             </div>
             <div>
                 <label htmlFor="password-confirmation">
@@ -84,9 +96,8 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
             </div>
             <button type="submit" disabled={loading}>
                 {loading ? '登録中...' : '登録'}
-                登録
             </button>
-            {error && <p>{error}</p>}
+            {generalError && <p className="text-red-500">Error: {generalError}</p>}
         </form>
     )
 }
